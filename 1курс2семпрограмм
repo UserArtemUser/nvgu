@@ -1,0 +1,77 @@
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include <time.h>
+using namespace std;
+
+//задание 1     Дан массив целых чисел из n элементов, заполненный случайным образом
+// числами из заданного пользователем промежутка. Удалить из него все элементы,
+//которые состоят из одинаковых цифр (включая однозначные числа). Отсортировать
+//получившийся массив и вывести его на экран и в файл.
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    srand(time(0));
+
+    int min, max, el, ll=0;
+
+
+    cout << "сколько элементов в массиве?\n";
+    cin >> el;
+    cout << "введите минимальное и максимальное значения элементов массива\n";
+    cout << "минимальное = ";
+    cin >> min;
+    cout << "максимальное = ";
+    cin >> max;
+    if (min>max)
+    {
+        cout << "минимальное число должно быть не больше максимального";
+        return 0;
+    }
+
+    int f[el];
+
+    cout << "  \n   вывод массива  \n";
+    for (int i = 0; i<el; i++)
+    {
+        f[i] = min + rand() % (max - min + 1);
+        cout << f[i] << "\n";
+    }
+
+    cout << "  \n   вывод ненужных элементов  \n";
+    for (int i = 0; i < el; i++)
+    {
+        f[i-ll] = f[i];
+        if (fmod(f[i],10) == f[i]/10 || abs(f[i])-10 < 0)
+        {
+            cout << f[i] << "\n";
+            ll++;
+        }
+    }
+    el -= ll;
+
+    for (int i = 0; i < el; i++)
+    {
+        for (int i = 0; i < el-1; i++)
+        {
+            if (f[i] > f[i + 1])
+            {
+                swap(f[i], f[i + 1]);
+            }
+        }
+    }
+    cout << "  \n   вывод остортированного  \n";
+
+    ofstream fail("text.txt");
+    if (!fail) return false;
+
+    for (int i = 0; i < el; i++)
+    {
+        cout << f[i] << "\n";
+        fail << f[i] << "\n";
+    }
+
+    fail.close();
+    return 0;
+}
